@@ -1,0 +1,6 @@
+export * from './character'
+export * from './swapi'
+export * from './film'
+export * from './planet'
+export * from './vehicle'
+export * from './starship'

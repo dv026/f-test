@@ -1,0 +1,75 @@
+@import './../../../common/colors.scss';
+@import './../../../common/mixins.scss';
+
+.character-item {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    height: 180px;
+    padding: 20px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    gap: 5px;
+    border: 1px solid white;
+    @include box-shadow;
+
+    &:hover {
+        border: 1px solid blue;
+    }
+
+    &__header {
+        display: flex;
+        gap: 10px;
+    }
+
+    &__basic-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__planet {
+        color: $light-grey;
+    }
+
+    &__body {
+        display: flex;
+        justify-content: space-between;
+        height: 100%;
+        margin-top: 10px;
+        margin-left: 15px;
+    }
+
+    &__left-block {
+        display: flex;
+        gap: 5px;
+        flex-direction: column;
+        // align-items: center;
+        // justify-content: space-around;
+        font-size: 14px;
+    }
+
+    &__right-block {
+        align-self: end;
+    }
+
+    &__devider {
+        width: 2px;
+        background-color: rgba(0, 0, 0, .15);
+    }
+
+    &__photo {
+        width: 50px;
+        height: 50px;
+
+        & img {
+            border-radius: 50%;
+        }
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+        color: $light-grey;
+    }
+}

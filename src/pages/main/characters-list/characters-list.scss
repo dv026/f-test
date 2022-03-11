@@ -1,0 +1,17 @@
+$card-gap: 40px;
+
+.characters-list {
+    // display: flex;
+    // flex-wrap: wrap;
+    // gap: $card-gap;
+    // justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 400px);
+    justify-content: center;
+    grid-gap: $card-gap;
+
+    & a {
+        color: inherit;
+        text-decoration: inherit;
+    }
+}

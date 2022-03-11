@@ -1,0 +1,14 @@
+@import './../../common/colors.scss';
+
+.divider {
+    background-color: $light-grey;
+
+    &--horizontal {
+        height: 1px;
+    }
+
+    &--vertical {
+        height: 100%;
+        width: 1px;
+    }
+}

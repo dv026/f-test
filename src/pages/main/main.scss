@@ -1,0 +1,11 @@
+.main-page {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+
+    &__search-bar {
+        width: 50%;
+        align-self: center;
+    }
+}
+
