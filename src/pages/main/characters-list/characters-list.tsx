@@ -1,31 +1,29 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Link } from "react-router-dom"
+import { observer } from 'mobx-react-lite'
 
-import { ICharacter } from "../../../interfaces/character"
-import { CharacterService } from "../../../services/character.service"
 import { getIdFromUrl } from "../../../utils"
 import { CharacterItem } from './../character-item'
+import characterStore from './../../../store'
 
 import './characters-list.scss'
 
-export const CharactersList = () => {
-    const [charactersList, setCharactersList] = useState<ICharacter[]>([])
+export const CharactersList = observer(() => {
 
     useEffect(() => {
-        CharacterService.getAllCharacters()
-            .then((response) => setCharactersList(response.data.results))
+        characterStore.fetchCharacters()
     }, [])
 
     return (
         <div className="characters-list">
-            {charactersList.map((character, index) => {
+            {characterStore.characters.map((character, index) => {
                 const characterId = getIdFromUrl(character.url)
                 return (
-                    <Link to={`/character/${characterId}`}>
+                    <Link to={`/character/${characterId}`} key={index + Date.now()} >
                         <CharacterItem {...character} />
                     </Link>
                 )
             })}
         </div>
     )
-}
+})

@@ -1,17 +1,17 @@
 import { AxiosResponse } from 'axios'
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Divider } from '../../components'
+import { useParams, Link } from 'react-router-dom'
 
 import { IFilm, IVehicle, IPlanet, IStarship, ICharacter } from '../../interfaces'
 import { CharacterService, PlanetService, FilmService, VehicleService, StarshipService } from '../../services'
 import { getIdFromUrl } from '../../utils'
 import { CharacterInclussions } from './character-incusions'
+import { ExtraInfo } from './extra-info'
 
 import './character.scss'
 
 export const Character = () => {
-    const [character, setCharacter] = useState<ICharacter>()
+    const [character, setCharacter] = useState<ICharacter>({} as ICharacter)
     const [planet, setPlanet] = useState<IPlanet>()
     const [films, setFilms] = useState<IFilm[]>([])
     const [vehicles, setVehicles] = useState<IVehicle[]>([])
@@ -19,43 +19,47 @@ export const Character = () => {
     const { id } = useParams();
 
     useEffect(() => {
+        let mounted = true
         if (id) {
-            CharacterService.getCharacter(id).then((response) => {
-                setCharacter(response.data)
-
-                const filmPromises = response.data.films.reduce((acc: Promise<AxiosResponse<IFilm>>[], filmUrl) => {
-                    acc.push(FilmService.getFilm(getIdFromUrl(filmUrl)))
-                    return acc
-                }, [])
-
-                const vehiclePromises = response.data.vehicles.reduce((acc: Promise<AxiosResponse<IVehicle>>[], vehicleUrl) => {
-                    acc.push(VehicleService.getVehicle(getIdFromUrl(vehicleUrl)))
-                    return acc
-                }, [])
-
-                const starshipPromises = response.data.starships.reduce((acc: Promise<AxiosResponse<IStarship>>[], vehicleUrl) => {
-                    acc.push(StarshipService.getStarship(getIdFromUrl(vehicleUrl)))
-                    return acc
-                }, [])
-
-                console.log(PlanetService.getPlanet(getIdFromUrl(response.data.homeworld)))
-                console.log(filmPromises)
-
-                Promise.all([
-                    PlanetService.getPlanet(getIdFromUrl(response.data.homeworld)),
-                    Promise.all(filmPromises),
-                    Promise.all(vehiclePromises),
-                    Promise.all(starshipPromises),
-                ])
+            CharacterService.getCharacter(id)
                 .then((response) => {
-                    console.log(response)
-                    setPlanet(response[0].data)
-                    setFilms(response[1].map((elem) => elem.data))
-                    setVehicles(response[2].map((elem) => elem.data))
-                    setStarships(response[3].map((elem) => elem.data))
+                    if (mounted) {
+                        setCharacter(response.data)
+                    }
+
+                    const filmPromises = response.data.films.reduce((acc: Promise<AxiosResponse<IFilm>>[], filmUrl) => {
+                        acc.push(FilmService.getFilm(getIdFromUrl(filmUrl)))
+                        return acc
+                    }, [])
+
+                    const vehiclePromises = response.data.vehicles.reduce((acc: Promise<AxiosResponse<IVehicle>>[], vehicleUrl) => {
+                        acc.push(VehicleService.getVehicle(getIdFromUrl(vehicleUrl)))
+                        return acc
+                    }, [])
+
+                    const starshipPromises = response.data.starships.reduce((acc: Promise<AxiosResponse<IStarship>>[], vehicleUrl) => {
+                        acc.push(StarshipService.getStarship(getIdFromUrl(vehicleUrl)))
+                        return acc
+                    }, [])
+
+                    Promise.all([
+                        PlanetService.getPlanet(getIdFromUrl(response.data.homeworld)),
+                        Promise.all(filmPromises),
+                        Promise.all(vehiclePromises),
+                        Promise.all(starshipPromises),
+                    ])
+                    .then((response) => {
+                        if (mounted) {
+                            setPlanet(response[0].data)
+                            setFilms(response[1].map((elem) => elem.data))
+                            setVehicles(response[2].map((elem) => elem.data))
+                            setStarships(response[3].map((elem) => elem.data))
+                        }
+                    })
                 })
-            })
+            .catch(_ => alert('smth went wrong'))
         }
+        return () => { mounted = false}
     }, [])
 
     return (
@@ -76,18 +80,9 @@ export const Character = () => {
                 <div><b>Gender:</b>&nbsp;{character?.gender}</div>
             </div>
             <div className="character__info character__info--extra">
-                <div><b>Hair color:</b>&nbsp;{character?.hair_color}</div>
-                <Divider type='vertical' />
-                <div><b>Skin color:</b>&nbsp;{character?.skin_color}</div>
-                <Divider type='vertical' />
-                <div><b>Eye color:</b>&nbsp;{character?.eye_color}</div>
-                <Divider type='vertical' />
-                <div><b>Birth year:</b>&nbsp;{character?.birth_year}</div>
-                <Divider type='vertical' />
-                <div><b>Created:</b>&nbsp;{new Date(character?.created || '').toLocaleDateString()}</div>
-                <Divider type='vertical' />
-                <div><b>Edited:</b>&nbsp;{new Date(character?.edited || '').toLocaleDateString()}</div>
+                <ExtraInfo {...character} />
             </div>
+            <Link to="/" className="character__back">Back</Link>
         </div>
     )
 }

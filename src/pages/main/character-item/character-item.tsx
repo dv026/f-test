@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 import { Divider } from './../../../components'
 import { PlanetService } from './../../../services'
 import { getIdFromUrl } from './../../../utils'
+import { ShallowInfo } from './shallow-info'
 
 import './character-item.scss'
-
 
 export const CharacterItem: React.FC<CharacterItemProps> = ({
     height,
@@ -17,12 +17,20 @@ export const CharacterItem: React.FC<CharacterItemProps> = ({
     vehicles,
     starships,
 }) => {
+
     const [planet, setPlanet] = useState('')
 
     useEffect(() => {
+        let mounted = true
         const planetId = getIdFromUrl(homeworld)
         PlanetService.getPlanet(planetId)
-            .then((response) => setPlanet(response.data.name))
+            .then((response) => {
+                if (mounted) {
+                    setPlanet(response.data.name)
+                }
+            })
+            .catch((error) => console.error('didn\'t get a planet - ' + error))
+            return () => { mounted = false }
     }, [])
 
     return (
@@ -39,48 +47,9 @@ export const CharacterItem: React.FC<CharacterItemProps> = ({
             <Divider type="horizontal" />
             <div className="character-item__body">
                 <div className="character-item__left-block">
-                    <div>
-                        {films.length > 0 &&
-                            <>
-                                &bull;
-                                &nbsp;
-                                <b>{films.length}</b>
-                                &nbsp;
-                                {films.length === 1
-                                    ? 'film'
-                                    : 'films'
-                                }
-                            </>
-                        }
-                    </div>
-                    <div>
-                        {vehicles.length > 0 &&
-                            <>
-                                &bull;
-                                &nbsp;
-                                <b>{vehicles.length}</b>
-                                &nbsp;
-                                {vehicles.length === 1
-                                        ? 'vehicle'
-                                        : 'vehicles'
-                                }
-                            </>
-                        }
-                    </div>
-                    <div>
-                        {starships.length > 0 &&
-                            <>
-                                &bull;
-                                &nbsp;
-                                <b>{starships.length}</b>
-                                &nbsp;
-                                {starships.length === 1
-                                    ? 'starship'
-                                    : 'starships'
-                                }
-                            </>
-                        }
-                    </div>
+                    <ShallowInfo collectionLength={films.length} type='films' />
+                    <ShallowInfo collectionLength={vehicles.length} type='vehicles' />
+                    <ShallowInfo collectionLength={starships.length} type='starships' />
                 </div>
                 <div className="character-item__right-block">
                     <div className="character-item__info">
@@ -104,16 +73,3 @@ interface CharacterItemProps {
     vehicles: string[]
     starships: string[]
 }
-
-// name: string
-//     height: string
-//     mass: string
-//     hair_color: string
-//     skin_color: string
-//     eye_color: string
-//     birth_year: string
-    
-//     homeworld: string
-//     created: string
-//     edited: string
-//     url: string

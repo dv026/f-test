@@ -1,0 +1,11 @@
+@import './../../../common/sizes.scss';
+
+.extra-info {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(6, 1fr);
+
+    @media (max-width: $desktop) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

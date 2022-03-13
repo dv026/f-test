@@ -1,24 +1,17 @@
-import React, { useEffect, useState } from 'react'
 import { Input } from 'antd'
-// import { debounce } from 'debounce'
-import { useDebouncedCallback } from 'use-debounce';
+import { observer } from 'mobx-react-lite'
 
-import './search-bar.scss'
-import { CharacterService } from '../../../services';
+import characterStore from './../../../store'
 
-export const SearchBar = () => {
-    const [value, setValue] = useState('')
-
-    const searchDebounced = useDebouncedCallback(() => {
-        CharacterService.searchCharacters(value)
-            .then((response) => console.log(response))
-    }, 200)
-
-    useEffect(() => {
-        searchDebounced()
-    }, [value])
-
+export const SearchBar = observer(() => {
     return (
-        <Input placeholder='search ...' value={value} onChange={(e: React.ChangeEvent<HTMLInputElement>) => setValue(e.target.value) } className="search-bar"/>
+        <Input
+            placeholder='search ...'
+            value={characterStore.filter}
+            onChange={(e) => {
+                characterStore.setFilter(e.target.value)
+                characterStore.setPage(1)
+            }}
+        />
     )
-}
+})

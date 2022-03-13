@@ -7,5 +7,18 @@
         width: 50%;
         align-self: center;
     }
+
+    &__pagination {
+        display: flex;
+        justify-content: center;
+
+        & a {
+            color: black;
+
+            &:hover, &:active, &:focus {
+                color: black;
+            }
+        }
+    }
 }
 

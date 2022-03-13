@@ -12,7 +12,7 @@ export class CharacterService {
         return swapi.get<ICharacter>(`/people/${id}`)
     }
 
-    static searchCharacters = (searchQuery: string): Promise<AxiosResponse<GetAllCharactersResponse>> => {
-        return swapi.get<GetAllCharactersResponse>(`/people?search=${searchQuery}`)
+    static searchCharacters = (searchQuery: string, page: number = 1): Promise<AxiosResponse<GetAllCharactersResponse>> => {
+        return swapi.get<GetAllCharactersResponse>(`/people?search=${searchQuery}&page=${page}`)
     }
 }
