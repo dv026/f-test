@@ -10,6 +10,7 @@ import { ExtraInfo } from './extra-info'
 
 import './character.scss'
 
+
 export const Character = () => {
     const [character, setCharacter] = useState<ICharacter>({} as ICharacter)
     const [planet, setPlanet] = useState<IPlanet>()
