@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="app">
       <Routes>
-        {publicRoutes.map((route, index) => <Route path={route.path} key={index + Date.now()} element={<route.element />} />)}
+        {publicRoutes.map((route, index) => <Route path={route.path} key={index} element={<route.element />} />)}
      </Routes>
     </div>
   );

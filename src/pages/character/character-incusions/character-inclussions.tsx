@@ -12,11 +12,11 @@ export const CharacterInclussions: React.FC<CollectionInfo> = ({ collection, tit
                         {collection.map((elem, index) => {
                             switch (type) {
                                 case 'films':
-                                    return <div key={Date.now() + index}>&bull;&nbsp;{(elem as IFilm).title}</div>
+                                    return <div key={index}>&bull;&nbsp;{(elem as IFilm).title}</div>
                                 case 'vehicles':
-                                    return <div key={Date.now() + index}>&bull;&nbsp;{(elem as IVehicle).name}</div>
+                                    return <div key={index}>&bull;&nbsp;{(elem as IVehicle).name}</div>
                                 case 'starships':
-                                    return <div key={Date.now() + index}>&bull;&nbsp;{(elem as IStarship).name}</div>
+                                    return <div key={index}>&bull;&nbsp;{(elem as IStarship).name}</div>
                                 default: 
                                     return null
                             }

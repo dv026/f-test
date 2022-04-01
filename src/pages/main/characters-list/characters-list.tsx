@@ -19,7 +19,7 @@ export const CharactersList = observer(() => {
             {characterStore.characters.map((character, index) => {
                 const characterId = getIdFromUrl(character.url)
                 return (
-                    <Link to={`/character/${characterId}`} key={index + Date.now()} >
+                    <Link to={`/character/${characterId}`} key={index} >
                         <CharacterItem {...character} />
                     </Link>
                 )
